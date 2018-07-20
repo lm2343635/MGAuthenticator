@@ -38,5 +38,5 @@ An iOS authenticator with customized passcode, TouchID and FaceID.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'SnapKit', '~> 4'
 end

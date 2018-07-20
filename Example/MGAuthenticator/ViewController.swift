@@ -22,11 +22,16 @@ class ViewController: UIViewController {
     }
 
     @IBAction func bometricsAuthenticate(_ sender: Any) {
-        MGAuthenticator.shared.authenticate { (success) in
+        MGAuthenticator.shared.authenticateWithBiometrics { (success) in
             DispatchQueue.main.async {
                 self.resultLabel.text = success ? "Success" : "Failed"
             }
         }
+        
+    }
+    
+    @IBAction func passcodeAuthenticate(_ sender: Any) {
+        present(MGPasscodeViewController(), animated: true)
         
     }
     

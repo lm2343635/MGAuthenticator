@@ -55,7 +55,7 @@ open class MGAuthenticator {
         }
     }
 
-    public func authenticate(completion: @escaping ((Bool) -> Void)) {
+    public func authenticateWithBiometrics(completion: @escaping ((Bool) -> Void)) {
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "MGAuth") { (success, error) in
             if let error = error {
                 print("Biometrics failed with error: " + error.localizedDescription)
@@ -63,6 +63,10 @@ open class MGAuthenticator {
             }
             completion(success)
         }
+    }
+    
+    public func authenticateWithPasscode() {
+        
     }
     
 }
