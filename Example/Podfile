@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MGAuthenticator_Example' do
+  pod 'MGAuthenticator', :path => '../'
+
+  target 'MGAuthenticator_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
