@@ -18,15 +18,14 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-An iOS authenticator with customized passcode, TouchID and FaceID.
+MGAuthenticator is an iOS authenticator with customized passcode, TouchID and FaceID.
+It makes it easy to protect the app with passcode, TouchID and FaceID.
                        DESC
 
   s.homepage         = 'https://github.com/lm2343635/MGAuthenticator'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'lm2343635' => 'lm2343635@126.com' }
   s.source           = { :git => 'https://github.com/lm2343635/MGAuthenticator.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
 
@@ -36,7 +35,5 @@ An iOS authenticator with customized passcode, TouchID and FaceID.
   #   'MGAuthenticator' => ['MGAuthenticator/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'SnapKit', '~> 4'
 end
