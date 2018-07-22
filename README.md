@@ -20,6 +20,10 @@ it, simply add the following line to your Podfile:
 pod 'MGAuthenticator'
 ```
 
+## Documentation
+
+The app's Info.plist must contain an NSFaceIDUsageDescription key with a string value explaining to the user how the app uses this data.
+
 ## Author
 
 lm2343635, lm2343635@126.com
