@@ -49,26 +49,53 @@ public class MGPasscodeViewController: UIViewController {
         let label = UILabel()
         label.text = "Enter passcode"
         label.font = UIFont.systemFont(ofSize: 18)
-        label.textColor = .blue
+        label.textColor = highlightColor
         label.textAlignment = .center
         return label
     }()
     
     private lazy var deleteButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setBackgroundImage(UIImage(named: "passcode_delete"), for: .normal)
+        button.addTarget(self, action: #selector(deletePasscode(sender:)), for: .touchUpInside)
+        button.setTitle("Delete", for: .normal)
+        button.setTitleColor(highlightColor, for: .normal)
+        button.setTitleColor(.white, for: .highlighted)
+        button.setBackgroundImage(buttonNormalBackground, for: .normal)
+        button.setBackgroundImage(buttonHighlightBackgroud, for: .highlighted)
 
         button.layer.cornerRadius = buttonWidth / 2
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.blue.cgColor
+        button.layer.borderColor = highlightColor.cgColor
         return button
     }()
     
     private lazy var points: [UIImageView] = []
     private lazy var buttons: [UIButton] = []
-    
-    let buttonWidth = UIScreen.main.bounds.size.width * 0.8 / 3 - 2 * Const.button.margin
 
+    private var passcodes: [Int] = []
+    
+    private let buttonWidth = UIScreen.main.bounds.size.width * 0.8 / 3 - 2 * Const.button.margin
+    private var buttonNormalBackground = UIImage()
+    private var buttonHighlightBackgroud = UIImage()
+    private var pointNormalBackground = UIImage()
+    private var pointHighlightBackgroud = UIImage()
+    
+    private var highlightColor = UIColor.blue
+    
+    public init(highlightColor: UIColor = .blue) {
+        super.init(nibName: nil, bundle: nil)
+        self.highlightColor = highlightColor
+        
+        buttonNormalBackground = circleImage(diameter: buttonWidth / 2, color: .white)
+        buttonHighlightBackgroud = circleImage(diameter: buttonWidth / 2, color: highlightColor)
+        pointNormalBackground = circleImage(diameter: Const.point.size / 2, color: .white)
+        pointHighlightBackgroud = circleImage(diameter: Const.point.size / 2, color: highlightColor)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,7 +108,7 @@ public class MGPasscodeViewController: UIViewController {
             let point = UIImageView(image: circleImage(diameter: Const.point.size, color: .white))
             point.layer.cornerRadius = Const.point.size / 2
             point.layer.borderWidth = 1
-            point.layer.borderColor = UIColor.blue.cgColor
+            point.layer.borderColor = highlightColor.cgColor
             
             view.addSubview(point)
             points.append(point)
@@ -89,15 +116,18 @@ public class MGPasscodeViewController: UIViewController {
         
         for number in 0...9 {
             let button = UIButton(type: .custom)
+            button.tag = number
+            button.addTarget(self, action: #selector(enterPasscode(sender:)), for: .touchUpInside)
+            
             button.setTitle("\(number)", for: .normal)
-            button.setTitleColor(.blue, for: .normal)
+            button.setTitleColor(highlightColor, for: .normal)
             button.setTitleColor(.white, for: .highlighted)
-            button.setBackgroundImage(circleImage(diameter: buttonWidth / 2, color: .white), for: .normal)
-            button.setBackgroundImage(circleImage(diameter: buttonWidth / 2, color: .blue), for: .highlighted)
+            button.setBackgroundImage(buttonNormalBackground, for: .normal)
+            button.setBackgroundImage(buttonHighlightBackgroud, for: .highlighted)
 
             button.layer.cornerRadius = buttonWidth / 2
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.blue.cgColor
+            button.layer.borderColor = highlightColor.cgColor
 
             view.addSubview(button)
             buttons.append(button)
@@ -197,6 +227,24 @@ public class MGPasscodeViewController: UIViewController {
         UIGraphicsEndImageContext()
         
         return img
+    }
+    
+    @objc private func enterPasscode(sender: UIButton) {
+        if passcodes.count == 4 {
+            return
+        }
+        
+        points[passcodes.endIndex].image = pointHighlightBackgroud
+        passcodes.append(sender.tag)
+    }
+    
+    @objc private func deletePasscode(sender: UIButton) {
+        if passcodes.count == 0 {
+            return
+        }
+        let index = passcodes.count - 1
+        points[index].image = pointNormalBackground
+        passcodes.remove(at: index)
     }
     
 }
