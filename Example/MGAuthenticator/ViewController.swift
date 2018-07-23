@@ -18,13 +18,17 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        bometricsType.text = "\(MGAuthenticator.shared.biometricsType)"
+        bometricsType.text = MGAuthenticator.shared.biometricsType.name
     }
 
     @IBAction func bometricsAuthenticate(_ sender: Any) {
-        MGAuthenticator.shared.authenticateWithBiometrics { (success) in
+        MGAuthenticator.shared.authenticateWithBiometrics { (success, error) in
             DispatchQueue.main.async {
                 self.resultLabel.text = success ? "Success" : "Failed"
+            }
+            
+            if !success {
+                self.showAlert(title: "Error", content: error.message)
             }
         }
         
@@ -37,3 +41,17 @@ class ViewController: UIViewController {
     
 }
 
+extension ViewController {
+    
+    func showAlert(title: String, content: String) {
+        DispatchQueue.main.async { [weak self] in
+            let alertController = UIAlertController(title: title,
+                                                    message: content,
+                                                    preferredStyle: .alert)
+            alertController.addAction(UIAlertAction.init(title: "OK", style: .cancel))
+            self?.present(alertController, animated: true)
+        }
+        
+    }
+    
+}
