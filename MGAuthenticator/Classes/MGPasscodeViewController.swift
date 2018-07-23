@@ -25,6 +25,12 @@
 
 import UIKit
 import SnapKit
+import AudioToolbox
+
+public enum MGPasscodeViewControllerMode {
+    case input
+    case authenticate
+}
 
 public class MGPasscodeViewController: UIViewController {
     
@@ -54,6 +60,8 @@ public class MGPasscodeViewController: UIViewController {
         return label
     }()
     
+    private lazy var pointsView = UIView()
+    
     private lazy var deleteButton: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(deletePasscode(sender:)), for: .touchUpInside)
@@ -73,17 +81,47 @@ public class MGPasscodeViewController: UIViewController {
     private lazy var buttons: [UIButton] = []
 
     private var passcodes: [Int] = []
+    private var firstPasscode: String? = nil
     
-    private let buttonWidth = UIScreen.main.bounds.size.width * 0.8 / 3 - 2 * Const.button.margin
+    private let buttonWidth: CGFloat = {
+        var width = UIScreen.main.bounds.size.width * 0.8
+        if width < 300 {
+            width = 300
+        } else if width > 500 {
+            width = 500
+        }
+        return width / 3 - 2 * Const.button.margin
+    }()
+    
     private var buttonNormalBackground = UIImage()
     private var buttonHighlightBackgroud = UIImage()
     private var pointNormalBackground = UIImage()
     private var pointHighlightBackgroud = UIImage()
     
-    private var highlightColor = UIColor.blue
+    private var highlightColor = UIColor.blue {
+        didSet {
+            buttonHighlightBackgroud = circleImage(diameter: buttonWidth / 2, color: highlightColor)
+            pointHighlightBackgroud = circleImage(diameter: Const.point.size / 2, color: highlightColor)
+            
+            titleLabel.textColor = highlightColor
+            for point in points {
+                point.layer.borderColor = highlightColor.cgColor
+            }
+            for button in buttons {
+                button.layer.borderColor = highlightColor.cgColor
+                button.setTitleColor(highlightColor, for: .normal)
+                button.setBackgroundImage(buttonHighlightBackgroud, for: .highlighted)
+            }
+            deleteButton.layer.borderColor = highlightColor.cgColor
+            deleteButton.setTitleColor(highlightColor, for: .normal)
+        }
+    }
     
-    public init(highlightColor: UIColor = .blue) {
+    private var mode = MGPasscodeViewControllerMode.authenticate
+    
+    public init(with mode: MGPasscodeViewControllerMode, highlightColor: UIColor = .blue) {
         super.init(nibName: nil, bundle: nil)
+        self.mode = mode
         self.highlightColor = highlightColor
         
         buttonNormalBackground = circleImage(diameter: buttonWidth / 2, color: .white)
@@ -110,9 +148,10 @@ public class MGPasscodeViewController: UIViewController {
             point.layer.borderWidth = 1
             point.layer.borderColor = highlightColor.cgColor
             
-            view.addSubview(point)
+            pointsView.addSubview(point)
             points.append(point)
         }
+        view.addSubview(pointsView)
         
         for number in 0...9 {
             let button = UIButton(type: .custom)
@@ -178,22 +217,22 @@ public class MGPasscodeViewController: UIViewController {
             }
         }
         
-        for index in [1, 2, 0, 3] {
-            points[index].snp.makeConstraints {
+        pointsView.snp.makeConstraints {
+            $0.width.equalTo(Const.point.size * CGFloat(points.count) + Const.point.horizontalMargin * CGFloat(points.count - 1))
+            $0.height.equalTo(Const.point.size)
+            $0.bottom.equalTo(buttons[2].snp.top).offset(-Const.point.bottomMargin)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        for (index, point) in points.enumerated() {
+            point.snp.makeConstraints {
                 $0.width.equalTo(Const.point.size)
                 $0.height.equalTo(Const.point.size)
-                $0.bottom.equalTo(buttons[2].snp.top).offset(-Const.point.bottomMargin)
-                switch index {
-                case 0:
-                    $0.right.equalTo(points[1].snp.left).offset(-Const.point.horizontalMargin)
-                case 1:
-                    $0.right.equalTo(buttons[2].snp.centerX).offset(-Const.point.horizontalMargin / 2)
-                case 2:
-                    $0.left.equalTo(buttons[2].snp.centerX).offset(Const.point.horizontalMargin / 2)
-                case 3:
-                    $0.left.equalTo(points[2].snp.right).offset(Const.point.horizontalMargin)
-                default:
-                    break
+                $0.top.equalToSuperview()
+                if index == 0 {
+                    $0.left.equalToSuperview()
+                } else {
+                    $0.left.equalTo(points[index - 1].snp.right).offset(Const.point.horizontalMargin)
                 }
             }
         }
@@ -236,6 +275,38 @@ public class MGPasscodeViewController: UIViewController {
         
         points[passcodes.endIndex].image = pointHighlightBackgroud
         passcodes.append(sender.tag)
+        
+        if passcodes.count == 4 {
+            switch mode {
+            case .input:
+                var newPasscode = ""
+                for code in passcodes {
+                    newPasscode.append(String(code))
+                }
+                if let passcode = firstPasscode {
+                    if passcode == newPasscode {
+                        print("Saved! \(passcode)")
+                    } else {
+                        alert()
+                        titleLabel.text = "Not matched, enter passcode."
+                        passcodes.removeAll()
+                        for point in points {
+                            point.image = pointNormalBackground
+                        }
+                        firstPasscode = nil
+                    }
+                } else {
+                    firstPasscode = newPasscode
+                    passcodes.removeAll()
+                    for point in points {
+                        point.image = pointNormalBackground
+                    }
+                    titleLabel.text = "Enter passcode again"
+                }
+            case .authenticate:
+                break
+            }
+        }
     }
     
     @objc private func deletePasscode(sender: UIButton) {
@@ -245,6 +316,22 @@ public class MGPasscodeViewController: UIViewController {
         let index = passcodes.count - 1
         points[index].image = pointNormalBackground
         passcodes.remove(at: index)
+    }
+    
+    private func alert() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        
+        let tmpColor = highlightColor
+        highlightColor = .red
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.highlightColor = tmpColor
+        }
+        
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        animation.duration = 0.6
+        animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+        pointsView.layer.add(animation, forKey: "shake")
     }
     
 }

@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func passcodeAuthenticate(_ sender: Any) {
-        present(MGPasscodeViewController(highlightColor: .green), animated: true)
+        present(MGPasscodeViewController(with: .input ,highlightColor: .green), animated: true)
         
     }
     

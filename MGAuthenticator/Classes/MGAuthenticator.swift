@@ -102,9 +102,22 @@ public enum MGAuthenticatorError {
 
 open class MGAuthenticator {
     
+    private struct Const {
+        static let passcodeStoreKey = "MGAuthenticator.passcodeStoreKey"
+    }
+    
     public static let shared = MGAuthenticator()
     
     private let context = LAContext()
+    
+    private var passcode: String? {
+        get {
+            return UserDefaults.standard.string(forKey: Const.passcodeStoreKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Const.passcodeStoreKey)
+        }
+    }
     
     public var biometricsType: MGBiometricsType {
         if !context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {

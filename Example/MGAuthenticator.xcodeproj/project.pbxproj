@@ -212,10 +212,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 5EE3Z46PC9;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 5EE3Z46PC9;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -471,6 +473,7 @@
 			baseConfigurationReference = 87C8761FB474970704A73043 /* Pods-MGAuthenticator_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5EE3Z46PC9;
 				INFOPLIST_FILE = MGAuthenticator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -486,6 +489,7 @@
 			baseConfigurationReference = CB2CB119DDD445F4BA44117F /* Pods-MGAuthenticator_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5EE3Z46PC9;
 				INFOPLIST_FILE = MGAuthenticator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -500,6 +504,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AA2F7C7FC8DB0BFC676F914B /* Pods-MGAuthenticator_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 5EE3Z46PC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -522,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97668B0FB422B5EC83FE9D67 /* Pods-MGAuthenticator_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 5EE3Z46PC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
