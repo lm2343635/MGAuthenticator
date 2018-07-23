@@ -37,7 +37,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func passcodeAuthenticate(_ sender: Any) {
-        
+        MGAuthenticator.shared.authenticateWithPasscode {
+            DispatchQueue.main.async {
+                self.resultLabel.text = "Success"
+            }
+        }
     }
     
     @IBAction func setPasscode(_ sender: Any) {

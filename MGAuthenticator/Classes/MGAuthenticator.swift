@@ -158,7 +158,7 @@ open class MGAuthenticator {
         }
     }
     
-    public func authenticateWithBiometrics(reason: String, completion: @escaping ((Bool, MGAuthenticatorError) -> Void)) {
+    public func authenticateWithBiometrics(reason: String, completion: @escaping ((Bool, MGAuthenticatorError) -> ())) {
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (success, error) in
             if let laError = error as? LAError {
                 print("Biometrics failed with error: " + laError.localizedDescription)
@@ -169,8 +169,12 @@ open class MGAuthenticator {
         }
     }
     
-    public func authenticateWithPasscode() {
-        
+    public func authenticateWithPasscode(success: @escaping (() -> ())) {
+        if let viewController = currentViewController, let passcode = passcode {
+            viewController.present(MGPasscodeViewController(with: .authenticate(passcode, {
+                success()
+            })), animated: true)
+        }
     }
     
 }

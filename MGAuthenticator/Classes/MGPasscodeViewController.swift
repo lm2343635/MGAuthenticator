@@ -29,7 +29,7 @@ import AudioToolbox
 
 public enum MGPasscodeViewControllerMode {
     case input((String) -> ())
-    case authenticate
+    case authenticate(String, (() -> Void))
 }
 
 public class MGPasscodeViewController: UIViewController {
@@ -53,7 +53,17 @@ public class MGPasscodeViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Enter passcode"
+        label.text = {
+            if let mode = mode {
+                switch mode {
+                case .input:
+                    return "Set passcode"
+                case .authenticate:
+                    return "Enter passcode"
+                }
+            }
+            return ""
+        }()
         label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = highlightColor
         label.textAlignment = .center
@@ -117,7 +127,8 @@ public class MGPasscodeViewController: UIViewController {
         }
     }
     
-    private var mode = MGPasscodeViewControllerMode.authenticate
+    private var mode: MGPasscodeViewControllerMode? = nil
+    private var alerting = false
     
     public init(with mode: MGPasscodeViewControllerMode, highlightColor: UIColor = .blue) {
         super.init(nibName: nil, bundle: nil)
@@ -269,34 +280,29 @@ public class MGPasscodeViewController: UIViewController {
     }
     
     @objc private func enterPasscode(sender: UIButton) {
-        if passcodes.count == 4 {
+        if alerting || passcodes.count == 4 {
             return
         }
         
         points[passcodes.endIndex].image = pointHighlightBackgroud
         passcodes.append(sender.tag)
         
-        if passcodes.count == 4 {
+        if passcodes.count == 4, let mode = mode {
+            var newPasscode = ""
+            for code in passcodes {
+                newPasscode.append(String(code))
+            }
+            
             switch mode {
-            case .input:
-                var newPasscode = ""
-                for code in passcodes {
-                    newPasscode.append(String(code))
-                }
+            case .input(let completion):
                 if let passcode = firstPasscode {
                     if passcode == newPasscode {
-                        if case let .input(completion) = mode {
-                            completion(passcode)
-                        }
+                        completion(passcode)
                         dismiss(animated: true)
                     } else {
                         alert()
-                        titleLabel.text = "Not matched, enter passcode."
-                        passcodes.removeAll()
-                        for point in points {
-                            point.image = pointNormalBackground
-                        }
-                        firstPasscode = nil
+                        clear()
+                        titleLabel.text = "Not matched, set passcode again."
                     }
                 } else {
                     firstPasscode = newPasscode
@@ -308,14 +314,21 @@ public class MGPasscodeViewController: UIViewController {
                         self.titleLabel.text = "Enter passcode again"
                     }
                 }
-            case .authenticate:
+            case .authenticate(let passcode, let success):
+                if passcode != newPasscode {
+                    alert()
+                    clear()
+                } else {
+                    success()
+                    dismiss(animated: true)
+                }
                 break
             }
         }
     }
     
     @objc private func deletePasscode(sender: UIButton) {
-        if passcodes.count == 0 {
+        if alerting || passcodes.count == 0 {
             return
         }
         let index = passcodes.count - 1
@@ -324,12 +337,14 @@ public class MGPasscodeViewController: UIViewController {
     }
     
     private func alert() {
+        alerting = true
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         
         let tmpColor = highlightColor
         highlightColor = .red
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.highlightColor = tmpColor
+            self.alerting = false
         }
         
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
@@ -337,6 +352,14 @@ public class MGPasscodeViewController: UIViewController {
         animation.duration = 0.6
         animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
         pointsView.layer.add(animation, forKey: "shake")
+    }
+    
+    private func clear() {
+        passcodes.removeAll()
+        for point in points {
+            point.image = pointNormalBackground
+        }
+        firstPasscode = nil
     }
     
 }
