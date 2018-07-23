@@ -36,6 +36,16 @@ public class MGPasscodeViewController: UIViewController {
         return label
     }()
     
+    private lazy var deleteButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setBackgroundImage(UIImage(named: "passcode_delete"), for: .normal)
+
+        button.layer.cornerRadius = buttonWidth / 2
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.blue.cgColor
+        return button
+    }()
+    
     private lazy var points: [UIImageView] = []
     private lazy var buttons: [UIButton] = []
     
@@ -47,6 +57,7 @@ public class MGPasscodeViewController: UIViewController {
         view.backgroundColor = .white// UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.7)
         
         view.addSubview(titleLabel)
+        view.addSubview(deleteButton)
         
         for _ in 0...3 {
             let point = UIImageView(image: circleImage(diameter: Const.point.size, color: .white))
@@ -144,6 +155,13 @@ public class MGPasscodeViewController: UIViewController {
             $0.leading.equalToSuperview()
             $0.height.equalTo(Const.title.height)
             $0.bottom.equalTo(points[1].snp.top).offset(-Const.title.bottomMargin)
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.width.equalTo(buttonWidth)
+            $0.height.equalTo(buttonWidth)
+            $0.centerX.equalTo(buttons[9].snp.centerX)
+            $0.centerY.equalTo(buttons[0].snp.centerY)
         }
     }
 

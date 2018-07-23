@@ -28,8 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		286F739FB082A8EB328467AD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		567CFC45CF7C30433E9654CA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		286F739FB082A8EB328467AD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		567CFC45CF7C30433E9654CA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* MGAuthenticator_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MGAuthenticator_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,7 +45,7 @@
 		87C8761FB474970704A73043 /* Pods-MGAuthenticator_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MGAuthenticator_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MGAuthenticator_Example/Pods-MGAuthenticator_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		97668B0FB422B5EC83FE9D67 /* Pods-MGAuthenticator_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MGAuthenticator_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MGAuthenticator_Tests/Pods-MGAuthenticator_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		AA2F7C7FC8DB0BFC676F914B /* Pods-MGAuthenticator_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MGAuthenticator_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MGAuthenticator_Tests/Pods-MGAuthenticator_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		C3A274DED8A1652D7B3C5053 /* MGAuthenticator.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = MGAuthenticator.podspec; path = ../MGAuthenticator.podspec; sourceTree = "<group>"; };
+		C3A274DED8A1652D7B3C5053 /* MGAuthenticator.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MGAuthenticator.podspec; path = ../MGAuthenticator.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CB2CB119DDD445F4BA44117F /* Pods-MGAuthenticator_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MGAuthenticator_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MGAuthenticator_Example/Pods-MGAuthenticator_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

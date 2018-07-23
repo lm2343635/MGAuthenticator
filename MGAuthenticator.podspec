@@ -31,9 +31,9 @@ It makes it easy to protect the app with passcode, TouchID and FaceID.
 
   s.source_files = 'MGAuthenticator/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'MGAuthenticator' => ['MGAuthenticator/Assets/*.png']
-  # }
+  s.resource_bundles = {
+    'MGAuthenticator' => ['MGAuthenticator/Assets/*.{xcassets}']
+  }
 
   s.dependency 'SnapKit', '~> 4'
 end
