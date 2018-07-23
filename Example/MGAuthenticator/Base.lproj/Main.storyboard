@@ -57,6 +57,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Passcode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMS-5l-XYH">
+                                <rect key="frame" x="16" y="164" width="79" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="unknown" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3b-Mt-rhO">
                                 <rect key="frame" x="145" y="125" width="214" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -81,17 +87,48 @@
                                     <action selector="passcodeAuthenticate:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZO0-d1-aNf"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jS1-M9-EaJ">
+                                <rect key="frame" x="16" y="496" width="343" height="45"/>
+                                <color key="backgroundColor" red="0.26274509800000001" green="0.60392156860000001" blue="0.87450980389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="CU4-rG-9AP"/>
+                                </constraints>
+                                <state key="normal" title="Set Passcode">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRaduis">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="setPasscode:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6LQ-Re-0lG"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="not set" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cje-W6-Nds">
+                                <rect key="frame" x="145" y="164" width="214" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="jS1-M9-EaJ" secondAttribute="trailing" constant="16" id="07V-gy-mb3"/>
                             <constraint firstItem="4Lt-qT-9lH" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="61" id="0CJ-dY-JXH"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="mpS-KY-B0n" secondAttribute="bottom" constant="20" id="7Ja-xF-i6H"/>
                             <constraint firstItem="jUs-sk-dJy" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="22" id="Anl-LE-jFS"/>
+                            <constraint firstItem="xMS-5l-XYH" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="100" id="C80-hO-stk"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="jS1-M9-EaJ" secondAttribute="bottom" constant="126" id="Ede-n7-05W"/>
+                            <constraint firstItem="cje-W6-Nds" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="100" id="EyV-VD-MyP"/>
                             <constraint firstItem="bdt-X8-TNb" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="F4J-tu-kb8"/>
                             <constraint firstAttribute="trailing" secondItem="m3b-Mt-rhO" secondAttribute="trailing" constant="16" id="FYq-or-KoK"/>
                             <constraint firstItem="mUw-HA-h7X" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="22" id="GmP-9g-xt8"/>
+                            <constraint firstAttribute="trailing" secondItem="cje-W6-Nds" secondAttribute="trailing" constant="16" id="MKN-NH-wn6"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="bdt-X8-TNb" secondAttribute="bottom" constant="73" id="WWS-FK-FhW"/>
+                            <constraint firstItem="jS1-M9-EaJ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="bE1-SS-dHk"/>
                             <constraint firstItem="4Lt-qT-9lH" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="dL5-jk-MOl"/>
+                            <constraint firstItem="xMS-5l-XYH" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="dzT-Nd-0Zz"/>
                             <constraint firstItem="jUs-sk-dJy" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="e4B-dw-U7Y"/>
                             <constraint firstAttribute="trailing" secondItem="bdt-X8-TNb" secondAttribute="trailing" constant="16" id="hDu-kc-ebm"/>
                             <constraint firstItem="mpS-KY-B0n" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="jRN-Z5-u8Z"/>
@@ -102,7 +139,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="MGAuthenticator" id="utJ-9T-yB8"/>
                     <connections>
-                        <outlet property="bometricsType" destination="mUw-HA-h7X" id="IlA-fy-okE"/>
+                        <outlet property="bometricsTypeLabel" destination="mUw-HA-h7X" id="tvs-aL-ml1"/>
+                        <outlet property="passcodeLabel" destination="cje-W6-Nds" id="qzH-kt-7qw"/>
                         <outlet property="resultLabel" destination="m3b-Mt-rhO" id="Xle-ul-PLo"/>
                     </connections>
                 </viewController>

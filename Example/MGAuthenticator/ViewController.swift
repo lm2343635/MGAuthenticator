@@ -11,18 +11,20 @@ import MGAuthenticator
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var bometricsType: UILabel!
+    @IBOutlet weak var bometricsTypeLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var passcodeLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        bometricsType.text = MGAuthenticator.shared.biometricsType.name
+        bometricsTypeLabel.text = MGAuthenticator.shared.biometricsType.name
+        passcodeLabel.text = MGAuthenticator.shared.passcodeSet ? "set" : "not set"
     }
 
     @IBAction func bometricsAuthenticate(_ sender: Any) {
-        MGAuthenticator.shared.authenticateWithBiometrics { (success, error) in
+        MGAuthenticator.shared.authenticateWithBiometrics(reason: "Test") { (success, error) in
             DispatchQueue.main.async {
                 self.resultLabel.text = success ? "Success" : "Failed"
             }
@@ -35,8 +37,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func passcodeAuthenticate(_ sender: Any) {
-        present(MGPasscodeViewController(with: .input ,highlightColor: .green), animated: true)
         
+    }
+    
+    @IBAction func setPasscode(_ sender: Any) {
+        MGAuthenticator.shared.setPasscode { passcode in
+            self.showAlert(title: "Passcode set", content: passcode)
+            self.passcodeLabel.text = "set"
+        }
     }
     
 }

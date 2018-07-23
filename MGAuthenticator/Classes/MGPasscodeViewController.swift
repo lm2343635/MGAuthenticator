@@ -28,7 +28,7 @@ import SnapKit
 import AudioToolbox
 
 public enum MGPasscodeViewControllerMode {
-    case input
+    case input((String) -> ())
     case authenticate
 }
 
@@ -285,7 +285,10 @@ public class MGPasscodeViewController: UIViewController {
                 }
                 if let passcode = firstPasscode {
                     if passcode == newPasscode {
-                        print("Saved! \(passcode)")
+                        if case let .input(completion) = mode {
+                            completion(passcode)
+                        }
+                        dismiss(animated: true)
                     } else {
                         alert()
                         titleLabel.text = "Not matched, enter passcode."
@@ -297,11 +300,13 @@ public class MGPasscodeViewController: UIViewController {
                     }
                 } else {
                     firstPasscode = newPasscode
-                    passcodes.removeAll()
-                    for point in points {
-                        point.image = pointNormalBackground
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.passcodes.removeAll()
+                        for point in self.points {
+                            point.image = self.pointNormalBackground
+                        }
+                        self.titleLabel.text = "Enter passcode again"
                     }
-                    titleLabel.text = "Enter passcode again"
                 }
             case .authenticate:
                 break

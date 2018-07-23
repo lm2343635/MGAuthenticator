@@ -119,6 +119,18 @@ open class MGAuthenticator {
         }
     }
     
+    private var currentViewController: UIViewController? {
+        var viewController = UIApplication.shared.keyWindow?.rootViewController
+        while let presentedViewController = viewController?.presentedViewController {
+            viewController = presentedViewController
+        }
+        return viewController
+    }
+    
+    public var passcodeSet: Bool {
+        return passcode != nil
+    }
+    
     public var biometricsType: MGBiometricsType {
         if !context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
             return .notSupported
@@ -137,8 +149,17 @@ open class MGAuthenticator {
         }
     }
 
-    public func authenticateWithBiometrics(completion: @escaping ((Bool, MGAuthenticatorError) -> Void)) {
-        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "MGAuth") { (success, error) in
+    public func setPasscode(completion: ((String) -> ())? = nil) {
+        if let viewController = currentViewController {
+            viewController.present(MGPasscodeViewController(with: .input({ [weak self] (passcode) in
+                self?.passcode = passcode
+                completion?(passcode)
+            })), animated: true)
+        }
+    }
+    
+    public func authenticateWithBiometrics(reason: String, completion: @escaping ((Bool, MGAuthenticatorError) -> Void)) {
+        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (success, error) in
             if let laError = error as? LAError {
                 print("Biometrics failed with error: " + laError.localizedDescription)
                 let error = MGAuthenticatorError(error: laError)
