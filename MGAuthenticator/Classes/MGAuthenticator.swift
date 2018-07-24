@@ -83,6 +83,8 @@ public enum MGAuthenticatorError {
     public var message: String {
         let biometricsName = MGAuthenticator.shared.biometricsType.name
         switch self {
+        case .failed:
+            return "Authentication failed."
         case .canceledByUser:
             return "Authentication is canceled by user."
         case .passcodeNotSet:
@@ -93,6 +95,7 @@ public enum MGAuthenticatorError {
             return "\(biometricsName) has not been set. Please go to Settings -> \(biometricsName) & Passcode."
         case .biometryLockedout:
             return "\(biometricsName) is locked now, because of too many failed attempts. Enter passcode to unlock \(biometricsName)."
+
         default:
             return "Unknown reason, try again later."
         }
@@ -109,6 +112,9 @@ open class MGAuthenticator {
     public static let shared = MGAuthenticator()
     
     private let context = LAContext()
+    
+    public var passcodeViewBackgroundColor = UIColor(white: 0.3, alpha: 0.8)
+    public var passcodeViewHighlightColor = UIColor.cyan
     
     private var passcode: String? {
         get {
@@ -150,16 +156,20 @@ open class MGAuthenticator {
     }
 
     public func setPasscode(completion: ((String) -> ())? = nil) {
-        if let viewController = currentViewController {
-            viewController.present(MGPasscodeViewController(with: .input({ [weak self] (passcode) in
-                self?.passcode = passcode
-                completion?(passcode)
-            })), animated: true)
+        guard let viewController = currentViewController else {
+            return
         }
+        let passcodeViewController = MGPasscodeViewController(with: .input({ [weak self] (passcode) in
+            self?.passcode = passcode
+            completion?(passcode)
+        }), backgroundColor: passcodeViewBackgroundColor, highlightColor: passcodeViewHighlightColor)
+
+        viewController.present(passcodeViewController, animated: true)
     }
     
-    public func authenticateWithBiometrics(reason: String, completion: @escaping ((Bool, MGAuthenticatorError) -> ())) {
-        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (success, error) in
+    public func authenticateWithBiometrics(reason: String, allowSystemPasscode: Bool = false, completion: @escaping ((Bool, MGAuthenticatorError) -> ())) {
+        let policy: LAPolicy = allowSystemPasscode ? .deviceOwnerAuthentication : .deviceOwnerAuthenticationWithBiometrics
+        context.evaluatePolicy(policy, localizedReason: reason) { (success, error) in
             if let laError = error as? LAError {
                 print("Biometrics failed with error: " + laError.localizedDescription)
                 let error = MGAuthenticatorError(error: laError)
@@ -170,11 +180,14 @@ open class MGAuthenticator {
     }
     
     public func authenticateWithPasscode(success: @escaping (() -> ())) {
-        if let viewController = currentViewController, let passcode = passcode {
-            viewController.present(MGPasscodeViewController(with: .authenticate(passcode, {
-                success()
-            })), animated: true)
+        guard let viewController = currentViewController, let passcode = passcode else {
+            return
         }
+        let passcodeViewController = MGPasscodeViewController(with: .authenticate(passcode, {
+            success()
+        }), backgroundColor: passcodeViewBackgroundColor, highlightColor: passcodeViewHighlightColor)
+        
+        viewController.present(passcodeViewController, animated: true)
     }
     
 }

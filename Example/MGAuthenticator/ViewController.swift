@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         bometricsTypeLabel.text = MGAuthenticator.shared.biometricsType.name
         passcodeLabel.text = MGAuthenticator.shared.passcodeSet ? "set" : "not set"

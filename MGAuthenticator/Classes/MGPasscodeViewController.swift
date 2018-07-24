@@ -77,7 +77,7 @@ public class MGPasscodeViewController: UIViewController {
         button.addTarget(self, action: #selector(deletePasscode(sender:)), for: .touchUpInside)
         button.setTitle("Delete", for: .normal)
         button.setTitleColor(highlightColor, for: .normal)
-        button.setTitleColor(.white, for: .highlighted)
+        button.setTitleColor(.clear, for: .highlighted)
         button.setBackgroundImage(buttonNormalBackground, for: .normal)
         button.setBackgroundImage(buttonHighlightBackgroud, for: .highlighted)
 
@@ -108,6 +108,7 @@ public class MGPasscodeViewController: UIViewController {
     private var pointNormalBackground = UIImage()
     private var pointHighlightBackgroud = UIImage()
     
+    private var backgroundColor = UIColor.white
     private var highlightColor = UIColor.blue {
         didSet {
             buttonHighlightBackgroud = circleImage(diameter: buttonWidth / 2, color: highlightColor)
@@ -130,14 +131,16 @@ public class MGPasscodeViewController: UIViewController {
     private var mode: MGPasscodeViewControllerMode? = nil
     private var alerting = false
     
-    public init(with mode: MGPasscodeViewControllerMode, highlightColor: UIColor = .blue) {
+    public init(with mode: MGPasscodeViewControllerMode, backgroundColor: UIColor, highlightColor: UIColor) {
         super.init(nibName: nil, bundle: nil)
         self.mode = mode
         self.highlightColor = highlightColor
+        self.backgroundColor = backgroundColor
         
-        buttonNormalBackground = circleImage(diameter: buttonWidth / 2, color: .white)
+        modalPresentationStyle = .overCurrentContext
+        buttonNormalBackground = circleImage(diameter: buttonWidth / 2, color: .clear)
         buttonHighlightBackgroud = circleImage(diameter: buttonWidth / 2, color: highlightColor)
-        pointNormalBackground = circleImage(diameter: Const.point.size / 2, color: .white)
+        pointNormalBackground = circleImage(diameter: Const.point.size / 2, color: .clear)
         pointHighlightBackgroud = circleImage(diameter: Const.point.size / 2, color: highlightColor)
     }
     
@@ -148,13 +151,13 @@ public class MGPasscodeViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white// UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.7)
+        view.backgroundColor = backgroundColor
         
         view.addSubview(titleLabel)
         view.addSubview(deleteButton)
         
         for _ in 0...3 {
-            let point = UIImageView(image: circleImage(diameter: Const.point.size, color: .white))
+            let point = UIImageView(image: circleImage(diameter: Const.point.size, color: .clear))
             point.layer.cornerRadius = Const.point.size / 2
             point.layer.borderWidth = 1
             point.layer.borderColor = highlightColor.cgColor
@@ -171,7 +174,7 @@ public class MGPasscodeViewController: UIViewController {
             
             button.setTitle("\(number)", for: .normal)
             button.setTitleColor(highlightColor, for: .normal)
-            button.setTitleColor(.white, for: .highlighted)
+            button.setTitleColor(.clear, for: .highlighted)
             button.setBackgroundImage(buttonNormalBackground, for: .normal)
             button.setBackgroundImage(buttonHighlightBackgroud, for: .highlighted)
 
